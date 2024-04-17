@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.c                                    :+:      :+:    :+:   */
+/*   get_next_line_bonus.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jllarena <jllarena@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/11/07 11:12:10 by jllarena          #+#    #+#             */
-/*   Updated: 2023/12/11 12:44:18 by jllarena         ###   ########.fr       */
+/*   Created: 2023/12/11 11:51:44 by jllarena          #+#    #+#             */
+/*   Updated: 2023/12/11 12:43:16 by jllarena         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
+#include "get_next_line_bonus.h"
 
 char	*extract_line(char *buffer)
 {
@@ -110,54 +110,65 @@ char	*read_from_file(char *basin_buffer, int fd)
 
 char	*get_next_line(int fd)
 {
-	static char	*basin_buffer = NULL;
+	static char	*basin_buffer[4096];
 	char		*line;
 
 	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
-	if (!basin_buffer)
-		basin_buffer = ft_gnlcalloc(1, sizeof(char));
-	if (!ft_gnlstrchr(basin_buffer, '\n'))
-		basin_buffer = read_from_file(basin_buffer, fd);
-	if (!basin_buffer)
+	if (!basin_buffer[fd])
+		basin_buffer[fd] = ft_gnlcalloc(1, sizeof(char));
+	if (!ft_gnlstrchr(basin_buffer[fd], '\n'))
+		basin_buffer[fd] = read_from_file(basin_buffer[fd], fd);
+	if (!basin_buffer[fd])
 	{
-		free(basin_buffer);
-		basin_buffer = NULL;
+		free(basin_buffer[fd]);
+		basin_buffer[fd] = NULL;
 		return (NULL);
 	}
-	line = extract_line(basin_buffer);
-	basin_buffer = obtain_remaining(basin_buffer);
+	line = extract_line(basin_buffer[fd]);
+	basin_buffer[fd] = obtain_remaining(basin_buffer[fd]);
 	return (line);
 }
-
-/*int main (void)
+/*
+int main(int argc, char **argv)
 {
-    int fd;
-    
-    char *line;
-    int count;
-    count = 0;
-    fd = open("example.txt", O_RDONLY);
-    
-    if (fd == -1)
+    int     fd[4096];
+    char    *line;
+    int     i;
+    int     j;
+    if  (argc == 1)
+        fd[0] = 0;
+    else
     {
-        printf("Error opening file");
-        return (1);
+        i = 1;
+        while (i < argc)
+        {
+            fd[i - 1] = open(argv[i], O_RDONLY);
+            if (fd[i - 1] == -1)
+        {
+            write (2, "Error: File not open.\n", 23);
+            return (-1);
+        }
+            i++;
+        }
     }
-    while(1)
+    j = 0;
+    while (j < argc - 1)
     {
-    printf("\n");
-    line = get_next_line(fd);
-    if(line == NULL)
-        break;
-    count++;
-    printf("line[%d]:%s\n",count, line);
-    free(line);
-    line = NULL;
+        line = get_next_line(fd[j]);
+        if (line)
+        printf("*line: %s\n", line);
+        free (line);
+        while (line)
+        {
+            line = get_next_line(fd[j]);
+            if (line)
+            printf("*line: %s\n", line);
+            free (line);
+        }
+        close (fd[j]);
+        j++;
     }
-    close(fd);
-    if(!line)
-    printf("line[%d]:%s\n",count, line);
-     system ("leaks a.out");
-    return(0);
+    //system("leaks a.out");
+    return (0);
 }*/

@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line_utils.c                              :+:      :+:    :+:   */
+/*   get_next_line_utils_bonus.c                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jllarena <jllarena@student.42urduliz.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/11/07 11:12:35 by jllarena          #+#    #+#             */
-/*   Updated: 2023/12/11 11:41:17 by jllarena         ###   ########.fr       */
+/*   Created: 2023/12/11 11:51:08 by jllarena          #+#    #+#             */
+/*   Updated: 2023/12/11 12:00:29 by jllarena         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
+#include "get_next_line_bonus.h"
 
 void	*ft_gnlcalloc(size_t count, size_t size)
 {
